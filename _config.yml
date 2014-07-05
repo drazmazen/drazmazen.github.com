@@ -1,7 +1,7 @@
 title:            code_in
 description:      painless code
 # Your site's domain goes here. Leave localhost server or blank when working locally.
-url:              http://localhost:4000
+url:              http://drazmazen.github.io
 disqus_shortname: drazmazengithub
 
 # Owner/author information
