@@ -105,7 +105,7 @@ public void Dehodorize()
 As you can see, this code looks a lot like the console application, with two exceptions:
 
 * Dehodorize method
-* wrapping stuff in a Task.Run
+* Wrapping stuff in a Task.Run()
 
 Dehodorize is, I think, self-explanatory, but let's take a closer look at that _Task.Run()_. If you ever had a chance to work with async-await, you already understand what's going on here, but for anyone that's seeing this for the first time: this _Task.Run()_ is basically just running the code inside the curly braces in a separate thread. And why would we all of a sudden need threading here? Well, what the _Application.Run()_ method is saying to our program is "now sit tight here and wait and listen for system messages". And like that, it blocks the main thread of the app at that line. But, if we want our service to react when we send it a call to Dehodorize() we need it to not be blocked. So, we run that part in a separate thread and our main thread is free to wait for further calls from the client. And, since both threads still belong to the same process, when we receive a Dehodorize call, executing _Aplication.Exit()_ will tell our blocked thread to unblock and proceed execution, which will in turn unhook our handler from keyboard input. Sounds simple enough, right? Well, hosting the service library in Visual Studio's WCF service host and running it confirms that it works. Now comes the question of hosting the library in some kind of process.
 
@@ -151,7 +151,7 @@ using (TaskService ts = new TaskService())
     ts.RootFolder.RegisterTaskDefinition("Hodorizer Service Starter", td);                
 }
 {% endhighlight %}
-And all that was left was to add this scheduler to be executed in the installer. This can be done in Visual Studio, by right-clicking on the installer project and selecting View->Custom Actions:
+And all that was left was to add this scheduler to be executed in the installer. This can be done in Visual Studio, by right-clicking on the installer project and selecting View -> Custom Actions:
 
 ![View Installer Custom Actions]({{ site.url }}/images/installer_view_custom_actions.png)
 
